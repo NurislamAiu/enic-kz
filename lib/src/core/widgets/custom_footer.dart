@@ -11,7 +11,7 @@ class CustomFooter extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🧱 Колонки ссылок
+          
           Wrap(
             spacing: 64,
             runSpacing: 40,
@@ -34,7 +34,7 @@ class CustomFooter extends StatelessWidget {
           const SizedBox(height: 48),
           const Divider(color: Colors.white24),
           const SizedBox(height: 20),
-          // 🔻 Нижний ряд
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

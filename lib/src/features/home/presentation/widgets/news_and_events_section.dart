@@ -209,7 +209,6 @@ class _EventCalendarItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 🎯 Дата в круге
         Column(
           children: [
             Container(
@@ -230,36 +229,70 @@ class _EventCalendarItem extends StatelessWidget {
                 ],
               ),
             ),
-            // 📍 Линия вниз
             Container(
               width: 2,
-              height: 40, // <-- высота линии между элементами
+              height: 40,
               color: Colors.grey.shade300,
             ),
           ],
         ),
         const SizedBox(width: 16),
-
-        // 📄 Текстовая часть
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 32), // <-- БОЛЬШЕ отступ между событиями
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.remove_red_eye_outlined, size: 13, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(views, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                  ],
-                ),
-              ],
+            padding: const EdgeInsets.only(bottom: 32),
+            child: _HoverableTitle(title: title, views: views),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HoverableTitle extends StatefulWidget {
+  final String title;
+  final String views;
+
+  const _HoverableTitle({required this.title, required this.views});
+
+  @override
+  State<_HoverableTitle> createState() => _HoverableTitleState();
+}
+
+class _HoverableTitleState extends State<_HoverableTitle> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MouseRegion(
+          onEnter: (_) => setState(() => isHovered = true),
+          onExit: (_) => setState(() => isHovered = false),
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              print("Clicked: ${widget.title}");
+            },
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              style: TextStyle(
+                fontSize: isHovered ? 16 : 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.blue,
+              ),
+              child: Text(widget.title),
             ),
           ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            const Icon(Icons.remove_red_eye_outlined, size: 13, color: Colors.grey),
+            const SizedBox(width: 4),
+            Text(widget.views, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          ],
         ),
       ],
     );

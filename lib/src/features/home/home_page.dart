@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../core/widgets/app_nav_menu.dart';
-import '../../core/widgets/banner_slider.dart';
+import 'presentation/widgets/banner_slider.dart';
 import '../../core/widgets/brand_header.dart';
 import '../../core/widgets/custom_footer.dart';
-import '../../core/widgets/feature_grid_section.dart';
-import '../../core/widgets/news_and_events_section.dart';
-import '../../core/widgets/partner_logos_section.dart';
+import 'presentation/widgets/feature_grid_section.dart';
+import 'presentation/widgets/news_and_events_section.dart';
+import 'presentation/widgets/partner_logos_section.dart';
 import '../../core/widgets/top_control_panel.dart';
 
 class HomePage extends StatelessWidget {

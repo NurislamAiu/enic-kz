@@ -10,7 +10,7 @@ class TopControlPanel extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: [
-          // 🔍 Поиск — НАЧАЛО
+          
           Expanded(
             child: Container(
               height: 44,
@@ -33,7 +33,7 @@ class TopControlPanel extends StatelessWidget {
                         hintText: 'Іздеу...',
                         hintStyle: const TextStyle(color: Colors.black45),
                         isCollapsed: true,
-                        // Убираем поведение изменения цвета при фокусе/наведении
+                        
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
@@ -42,7 +42,7 @@ class TopControlPanel extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide.none,
                         ),
-                        hoverColor: Colors.transparent, // предотвращает цвет при hover
+                        hoverColor: Colors.transparent, 
                         focusColor: Colors.transparent,
                       ),
                     ),
@@ -89,7 +89,7 @@ class TopControlPanel extends StatelessWidget {
   }
 }
 
-// 🌐 Языковая панель
+
 class _LangSelector extends StatelessWidget {
   const _LangSelector();
 
@@ -118,7 +118,7 @@ class _LangSelector extends StatelessWidget {
   }
 }
 
-// 👤 Иконка в круге
+
 class _CircleIcon extends StatelessWidget {
   final IconData icon;
   const _CircleIcon(this.icon);
