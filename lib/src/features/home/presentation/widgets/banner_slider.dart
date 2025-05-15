@@ -10,40 +10,13 @@ class BannerSlider extends StatefulWidget {
 }
 
 class _BannerSliderState extends State<BannerSlider> {
-  final PageController _controller = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  final List<Map<String, String>> banners = [
-    {
-      "date": "26.03.2025",
-      "views": "881",
-      "title": "«БББ Тізілімі» ақпараттық жүйесіне өтінімдерді қабылдау",
-      "description": "Жоғары білім беруді дамытудың ұлттық орталығы ...",
-    },
-    {
-      "date": "26.03.2025",
-      "views": "881",
-      "title": "«БББ Тізілімі» ақпараттық жүйесіне өтінімдерді қабылдау",
-      "description": "Жоғары білім беруді дамытудың ұлттық орталығы ...",
-    },
-    {
-      "date": "26.03.2025",
-      "views": "881",
-      "title": "«БББ Тізілімі» ақпараттық жүйесіне өтінімдерді қабылдау",
-      "description": "Жоғары білім беруді дамытудың ұлттық орталығы ...",
-    },
-    {
-      "date": "26.03.2025",
-      "views": "881",
-      "title": "«БББ Тізілімі» ақпараттық жүйесіне өтінімдерді қабылдау",
-      "description": "Жоғары білім беруді дамытудың ұлттық орталығы ...",
-    },
-    {
-      "date": "13.05.2025",
-      "views": "8",
-      "title": "Қазақстан мен Италия ынтымақтастығын нығайтады",
-      "description": "Цифрлық трансформация және біліктілікті тану ...",
-    },
+  final List<String> banners = [
+    'Жоғары білім беруді дамыту ұлттық орталығының сайтына бета-нұсқасын әзірлеу бойынша конкурс жарияланды',
+    'Жоғары білім саласындағы өзекті жаңалықтар',
+    'ENIC-Kazakhstan платформасы тестілеу режимінде іске қосылды',
   ];
 
   @override
@@ -51,113 +24,95 @@ class _BannerSliderState extends State<BannerSlider> {
     super.initState();
     Timer.periodic(const Duration(seconds: 5), (timer) {
       if (!mounted) return;
-      final next = (_currentIndex + 1) % banners.length;
-      _controller.animateToPage(next, duration: const Duration(milliseconds: 500), curve: Curves.linear);
+      final nextPage = (_currentIndex + 1) % banners.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+      setState(() => _currentIndex = nextPage);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300,
-      width: double.infinity,
-      child: Stack(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
         children: [
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0288D1), Color(0xFF01579B)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+          SizedBox(
+            height: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: banners.length,
+                physics: const BouncingScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() => _currentIndex = index);
+                },
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF407FC7), Color(0xFF417FC8)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            banners[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Colors.white),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            textStyle: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          child: const Text('Толығырақ'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ),
 
-          PageView.builder(
-            controller: _controller,
-            itemCount: banners.length,
-            onPageChanged: (index) => setState(() => _currentIndex = index),
-              itemBuilder: (context, index) {
-                final b = banners[index];
-                final isCurrent = index == _currentIndex;
+          const SizedBox(height: 8),
 
-                return Padding(
-                  padding: const EdgeInsets.all(28),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: AnimatedSlide(
-                      offset: isCurrent ? Offset(0, 0) : const Offset(0.5, 0),
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.easeOut,
-                      child: AnimatedOpacity(
-                        opacity: isCurrent ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 400),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 600),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(b['date']!, style: const TextStyle(color: Colors.white70, fontSize: 13)),
-                                  const SizedBox(width: 8),
-                                  const Icon(Icons.remove_red_eye, color: Colors.white70, size: 16),
-                                  const SizedBox(width: 4),
-                                  Text(b['views']!, style: const TextStyle(color: Colors.white70, fontSize: 13)),
-                                ],
-                              ),
-                              const SizedBox(height: 18),
-                              Text(
-                                b['title']!,
-                                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                b['description']!,
-                                style: const TextStyle(color: Colors.white, fontSize: 15, height: 1.5),
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_forward, size: 18),
-                                label: const Text("Толығырақ"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: const Color(0xFF01579B),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-          ),
-
-          Positioned(
-            bottom: 16,
-            right: 28,
-            child: Row(
-              children: List.generate(banners.length, (index) {
-                final isActive = index == _currentIndex;
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 3),
-                  width: isActive ? 12 : 8,
-                  height: isActive ? 12 : 8,
-                  decoration: BoxDecoration(
-                    color: isActive ? Colors.white : Colors.white54,
-                    shape: BoxShape.circle,
-                  ),
-                );
-              }),
-            ),
+          // Индикаторы
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(banners.length, (index) {
+              final isActive = index == _currentIndex;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: isActive ? 18 : 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: isActive ? Colors.black26 : Colors.black12,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              );
+            }),
           ),
         ],
       ),
