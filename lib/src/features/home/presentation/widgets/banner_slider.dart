@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-
 class BannerSlider extends StatefulWidget {
   const BannerSlider({super.key});
 
@@ -83,7 +82,9 @@ class _BannerSliderState extends State<BannerSlider> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            textStyle: const TextStyle(fontWeight: FontWeight.w500),
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           child: const Text('Подробнее'),
                         ),

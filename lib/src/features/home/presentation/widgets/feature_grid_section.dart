@@ -20,35 +20,35 @@ class FeatureGridSection extends StatelessWidget {
               final isMobile = constraints.maxWidth < 700;
               return isMobile
                   ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildMainBlock(darkBlue),
-                  const SizedBox(height: 32),
-                  _buildImage(),
-                  const SizedBox(height: 32),
-                  _buildSideTopics(context, darkBlue),
-                ],
-              )
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMainBlock(darkBlue),
+                      const SizedBox(height: 32),
+                      _buildImage(),
+                      const SizedBox(height: 32),
+                      _buildSideTopics(context, darkBlue),
+                    ],
+                  )
                   : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildMainBlock(darkBlue),
-                        const SizedBox(height: 32),
-                        _buildImage(),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: _buildSideTopics(context, darkBlue),
-                  ),
-                ],
-              );
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildMainBlock(darkBlue),
+                            const SizedBox(height: 32),
+                            _buildImage(),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: _buildSideTopics(context, darkBlue),
+                      ),
+                    ],
+                  );
             },
           ),
         ),
@@ -73,7 +73,7 @@ class FeatureGridSection extends StatelessWidget {
         const Text(
           'Ответы на популярные вопросы о системе образования',
           style: TextStyle(fontSize: 17, color: Colors.black87, height: 1.5),
-        )
+        ),
       ],
     );
   }
@@ -92,10 +92,22 @@ class FeatureGridSection extends StatelessWidget {
 
   Widget _buildSideTopics(BuildContext context, Color color) {
     final importantItems = [
-      {'title': '30 ОП ПО', 'desc': 'Образовательные программы послевузовского образования'},
-      {'title': 'Практика дистанционного обучения', 'desc': 'Подходы и стандарты при онлайн обучении'},
-      {'title': 'Качество образования', 'desc': 'Система внутреннего обеспечения качества'},
-      {'title': 'Академическая честность', 'desc': 'Принципы академической этики и предотвращения плагиата'},
+      {
+        'title': '30 ОП ПО',
+        'desc': 'Образовательные программы послевузовского образования',
+      },
+      {
+        'title': 'Практика дистанционного обучения',
+        'desc': 'Подходы и стандарты при онлайн обучении',
+      },
+      {
+        'title': 'Качество образования',
+        'desc': 'Система внутреннего обеспечения качества',
+      },
+      {
+        'title': 'Академическая честность',
+        'desc': 'Принципы академической этики и предотвращения плагиата',
+      },
     ];
 
     final extraItems = [
@@ -116,7 +128,7 @@ class FeatureGridSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...importantItems.map(
-              (item) => _AnimatedTopicLine(
+          (item) => _AnimatedTopicLine(
             title: item['title']!,
             description: item['desc']!,
             color: color,
@@ -130,26 +142,30 @@ class FeatureGridSection extends StatelessWidget {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              builder: (_) => Padding(
-                padding: const EdgeInsets.all(24),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    const Text(
-                      'Дополнительные темы',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    ...extraItems.map(
+              builder:
+                  (_) => Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        const Text(
+                          'Дополнительные темы',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ...extraItems.map(
                           (title) => ListTile(
-                        leading: const Icon(Icons.arrow_right),
-                        title: Text(title),
-                        onTap: () => Navigator.pop(context),
-                      ),
+                            leading: const Icon(Icons.arrow_right),
+                            title: Text(title),
+                            onTap: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
             );
           },
           icon: const Icon(Icons.more_horiz),
@@ -195,7 +211,7 @@ class _AnimatedTopicLineState extends State<_AnimatedTopicLine> {
             Text(
               widget.title,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: widget.color,
                 letterSpacing: 1.2,
@@ -214,7 +230,11 @@ class _AnimatedTopicLineState extends State<_AnimatedTopicLine> {
             ),
             Text(
               widget.description,
-              style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black87,
+                height: 1.5,
+              ),
             ),
             const Divider(height: 32),
           ],
