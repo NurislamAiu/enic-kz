@@ -56,7 +56,7 @@ class _BannerSliderState extends State<BannerSlider> {
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xFF407FC7), Color(0xFF417FC8)],
+                        colors: [Color(0xFF1F327D), Color(0xFF1F327D)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),

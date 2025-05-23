@@ -117,7 +117,7 @@ class _AppNavMenuState extends State<AppNavMenu> {
                                 Icon(item.icon,
                                     color: isSelected
                                         ? brandColor
-                                        : Colors.grey[600]),
+                                        : Colors.black),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
@@ -132,7 +132,7 @@ class _AppNavMenuState extends State<AppNavMenu> {
                                               : FontWeight.w500,
                                           color: isSelected
                                               ? brandColor
-                                              : Colors.grey[800],
+                                              : Colors.black,
                                         ),
                                       ),
                                       AnimatedContainer(

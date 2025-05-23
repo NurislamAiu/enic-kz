@@ -65,9 +65,11 @@ class _HomePageState extends State<HomePage>
                 selectedLanguage: 'RU',
                 onLanguageChanged: (lang) {
                   print("Выбран язык: $lang");
-
                 },
-                trailing: IconButton(onPressed: _toggleMenu, icon: Icon(Icons.menu))
+                trailing: IconButton(
+                  onPressed: _toggleMenu,
+                  icon: Icon(Icons.menu),
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -77,17 +79,7 @@ class _HomePageState extends State<HomePage>
                     children: [
                       const BannerSlider(),
                       const SizedBox(height: 24),
-                      FeatureGridSection(
-                        items: [
-                          {'title': 'Академиялық адалдық', 'route': '/honesty'},
-                          {'title': 'Жиі қойылатын сұрақтар', 'route': '/faq'},
-                          {'title': 'Ғылыми зерттеулер', 'route': '/research'},
-                          {
-                            'title': 'ҚР ЖОО-ларындағы тәжірибелер',
-                            'route': '/best-practices',
-                          },
-                        ],
-                      ),
+                      FeatureGridSection(),
                       const NewsAndEventsSection(),
                       const SizedBox(height: 32),
                       const PartnerLogoCarousel(
