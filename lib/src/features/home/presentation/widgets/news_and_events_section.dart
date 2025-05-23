@@ -8,22 +8,19 @@ class NewsAndEventsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFFF3F6FB),
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 24),
+      padding: const EdgeInsets.all(30),
       alignment: Alignment.center,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _SectionTitle('Жаңалықтар', 'Барлык жаңалықтар'),
-            const SizedBox(height: 32),
-            const _NewsList(),
-            const SizedBox(height: 48),
-            const _SectionTitle('Оқиғалар', 'Барлык оқиғалар'),
-            const SizedBox(height: 24),
-            const _EventTimeline(),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          _SectionTitle('Жаңалықтар', 'Барлык жаңалықтар'),
+          SizedBox(height: 32),
+          NewsCardList(),
+          SizedBox(height: 48),
+          _SectionTitle('Оқиғалар', 'Барлык оқиғалар'),
+          SizedBox(height: 24),
+          EventTimeline(),
+        ],
       ),
     );
   }
@@ -48,7 +45,7 @@ class _SectionTitle extends StatelessWidget {
           onPressed: () {},
           child: Text(
             onTap,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xFF2A5ACF),
               fontWeight: FontWeight.w500,
             ),
@@ -59,104 +56,189 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _NewsList extends StatelessWidget {
-  const _NewsList();
+class NewsCardList extends StatelessWidget {
+  const NewsCardList();
 
   @override
   Widget build(BuildContext context) {
     final news = [
       {
-        'title': 'Қазақстан мен Италия цифрлық трансформацияда ынтымақтастықты кеңейтуде',
-        'date': '13 Мамыр 2025',
         'image': 'assets/image/news.jpeg',
+        'headline': 'FUNDING WITHHELD',
+        'title': 'Novel drug research',
+        'description': 'Wyss’ Don Ingber details the rush to hold onto consequential projects, talented researchers, and the system that has driven American innovation.',
       },
       {
-        'title': 'PhD дәрежелерін тану жеңілдетілді',
-        'date': '30 Қазан 2025',
         'image': 'assets/image/news.jpeg',
+        'headline': 'FUNDING WITHHELD',
+        'title': 'Tuberculosis research',
+        'description': 'Immunologist Sarah Fortune received a stop-work order from the federal government on April 15, instructing her to halt her world-class tuberculosis research.',
       },
       {
-        'title': 'Бүкіл өмір бойы білім алу – жаңа мүмкіндік',
-        'date': '28 Сәуір 2025',
         'image': 'assets/image/news.jpeg',
+        'headline': 'FUNDING WITHHELD',
+        'title': 'ALS research',
+        'description': 'David Walt received a stop-work order from the Department of Health and Human Services for a National Institute of Health project focused on ALS.',
       },
     ];
 
-    return Column(
-      children: news
-          .map((n) => Padding(
-        padding: const EdgeInsets.only(bottom: 24),
-        child: _GlassTile(
-          image: n['image']!,
-          title: n['title']!,
-          date: n['date']!,
-        ),
-      ))
-          .toList(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 700;
+        return Wrap(
+          spacing: 24,
+          runSpacing: 24,
+          children: news.map((item) {
+            return SizedBox(
+              width: isMobile ? constraints.maxWidth : (constraints.maxWidth - 48) / 3,
+              child: NewsCardOverlayStyle(
+                image: item['image']!,
+                headline: item['headline']!,
+                title: item['title']!,
+                description: item['description']!,
+              ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }
 
-class _GlassTile extends StatelessWidget {
+class NewsCardOverlayStyle extends StatefulWidget {
   final String image;
+  final String headline;
   final String title;
-  final String date;
+  final String description;
 
-  const _GlassTile({
+  const NewsCardOverlayStyle({super.key,
     required this.image,
+    required this.headline,
     required this.title,
-    required this.date,
+    required this.description,
   });
 
   @override
+  State<NewsCardOverlayStyle> createState() => _NewsCardOverlayStyleState();
+}
+
+class _NewsCardOverlayStyleState extends State<NewsCardOverlayStyle> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return _HoverScaleCard(
-      child: Container(
-        height: 140,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        transform: _hovered
+            ? Matrix4.translationValues(0, -4, 0)
+            : Matrix4.identity(),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withOpacity(_hovered ? 0.15 : 0.08),
               blurRadius: 12,
               offset: const Offset(0, 6),
-            )
+            ),
           ],
         ),
+        height: 320,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Row(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
             children: [
-              // Image
-              AspectRatio(
-                aspectRatio: 1.3,
-                child: Image.asset(image, fit: BoxFit.cover),
+              // 📷 Фоновое изображение
+              Positioned.fill(
+                child: Image.asset(
+                  widget.image,
+                  fit: BoxFit.cover,
+                ),
               ),
 
-              // Text
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        date,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ],
+              // 🌫️ Overlay градиент
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.05),
+                        Colors.black.withOpacity(0.8),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                   ),
                 ),
-              )
+              ),
+
+              // ✏️ Контент
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.fiber_manual_record,
+                            size: 10, color: Colors.redAccent),
+                        const SizedBox(width: 6),
+                        Text(
+                          widget.headline,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        TweenAnimationBuilder<double>(
+                          tween: Tween<double>(begin: 0, end: _hovered ? 1 : 0),
+                          duration: const Duration(milliseconds: 300),
+                          builder: (context, value, child) {
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                height: 2,
+                                width: 100 * value,
+                                margin: const EdgeInsets.only(top: 4),
+                                color: Colors.orangeAccent.withOpacity(value),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      widget.description,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.white70,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -165,134 +247,176 @@ class _GlassTile extends StatelessWidget {
   }
 }
 
-
-
-class _EventTimeline extends StatelessWidget {
-  const _EventTimeline();
+class EventTimeline extends StatelessWidget {
+  const EventTimeline({super.key});
 
   @override
   Widget build(BuildContext context) {
     final events = [
       {
-        'day': '05',
-        'month': 'Сәуір',
-        'title': 'Жаңа кәсіптердің атласы',
-        'description': 'Кәсіптер болашағына арналған форум',
-        'icon': Icons.business_center,
+        'image': 'assets/image/news.jpeg',
+        'category': 'HARVARD SCHOOL OF ENGINEERING',
+        'title': 'Regained mobility for stroke survivors',
+        'description':
+        'This soft, wearable robotic device developed at the Harvard Move Lab is helping stroke survivors regain independence.',
+        'button': 'Check out the new device',
       },
       {
-        'day': '30',
-        'month': 'Қазан',
-        'title': 'PhD дәрежесін тану',
-        'description': 'Жаңа заң жобасы туралы кездесу',
-        'icon': Icons.school_outlined,
-      },
-      {
-        'day': '22',
-        'month': 'Қазан',
-        'title': 'Қазақстанның жоғары мектебі',
-        'description': 'Журнал презентациясы мен талқылау',
-        'icon': Icons.book_outlined,
+        'image': 'assets/image/news.jpeg',
+        'category': 'HARVARD MEDICAL SCHOOL',
+        'title': 'New treatment for sickle cell patients',
+        'description':
+        'A new FDA-approved gene therapy from Harvard Medical School and Dana-Farber Cancer Institute promises monumental impact.',
+        'button': 'Learn more about the breakthrough',
       },
     ];
 
-    return Column(
-      children: List.generate(events.length, (index) {
-        final event = events[index];
-        final isLast = index == events.length - 1;
-
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 32),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ║ Ось и точка
-              Column(
-                children: [
-                  // 🔘 Элегантная точка
-                  Container(
-                    width: 14,
-                    height: 14,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF1F327D),
-                    ),
-                  ),
-                  // ║ Тонкая ось
-                  if (!isLast)
-                    Container(
-                      width: 2,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(width: 24),
-
-              // 📝 Карточка события
-              Expanded(
-                child: _HoverScaleCard(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                          color: Colors.black.withOpacity(0.04),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${event['day']} ${event['month']}',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1F327D),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Icon(event['icon'] as IconData, size: 20, color: Color(0xFF1F327D)),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                '${event['title']!}'
-                                ,
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '${event['description']!}',
-                          style: const TextStyle(fontSize: 13, color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 700;
+        return Column(
+          children: events.map((event) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 32),
+              child: isMobile
+                  ? _EventHighlightCardVertical(event: event)
+                  : _EventHighlightCardHorizontal(event: event),
+            );
+          }).toList(),
         );
-      }),
+      },
     );
   }
 }
 
+class _EventHighlightCardHorizontal extends StatelessWidget {
+  final Map<String, String> event;
+
+  const _EventHighlightCardHorizontal({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // 📷 Image
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.asset(
+            event['image']!,
+            width: 300,
+            height: 200,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(width: 24),
+        // 📄 Textual content
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                event['category']!.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                event['title']!,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                event['description']!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.arrow_forward, size: 18),
+                label: Text(
+                  event['button']!,
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.black87),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _EventHighlightCardVertical extends StatelessWidget {
+  final Map<String, String> event;
+
+  const _EventHighlightCardVertical({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.asset(
+            event['image']!,
+            width: double.infinity,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          event['category']!.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 11,
+            color: Colors.black54,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          event['title']!,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            height: 1.3,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          event['description']!,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.black87,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.arrow_forward, size: 18),
+          label: Text(event['button']!),
+          style: TextButton.styleFrom(foregroundColor: Colors.black87),
+        )
+      ],
+    );
+  }
+}
 
 class _HoverScaleCard extends StatefulWidget {
   final Widget child;

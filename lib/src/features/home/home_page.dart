@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage>
                     children: [
                       const BannerSlider(),
                       const SizedBox(height: 24),
-                      FeatureGridSection(),
+                      const FeatureGridSection(),
                       const NewsAndEventsSection(),
                       const SizedBox(height: 32),
                       const PartnerLogoCarousel(
