@@ -85,7 +85,7 @@ class _BannerSliderState extends State<BannerSlider> {
                             ),
                             textStyle: const TextStyle(fontWeight: FontWeight.w500),
                           ),
-                          child: const Text('Толығырақ'),
+                          child: const Text('Подробнее'),
                         ),
                       ],
                     ),

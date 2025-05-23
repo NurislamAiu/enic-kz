@@ -1,67 +1,68 @@
 import 'package:flutter/material.dart';
 
 class TopControlPanel extends StatelessWidget {
-  const TopControlPanel({super.key});
+  final Widget? trailing;
+  final String selectedLanguage;
+  final ValueChanged<String> onLanguageChanged;
+
+  const TopControlPanel({
+    super.key,
+    this.trailing,
+    required this.selectedLanguage,
+    required this.onLanguageChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     const brandColor = Color(0xFF1F327D);
+    const langOptions = ['KZ', 'RU', 'EN'];
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
       child: Row(
         children: [
-          // ENIC - KAZAKHSTAN
           const Text(
             'ENIC - KAZAKHSTAN',
             style: TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: brandColor,
-              letterSpacing: 0.5,
+              letterSpacing: 0.8,
             ),
           ),
-
           const Spacer(),
-
-          // Language selector
-          const Text(
-            'KZ',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Row(
+            children: langOptions.map((lang) {
+              final isSelected = lang == selectedLanguage;
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: isSelected ? brandColor : Colors.transparent,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  onPressed: () => onLanguageChanged(lang),
+                  child: Text(
+                    lang,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: isSelected ? Colors.white : brandColor,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
           ),
-          const SizedBox(width: 24),
-
-          // Search Icon
-          _IconBtn(icon: Icons.search),
-
-          const SizedBox(width: 16),
-
-          // Facebook Icon
-          _IconBtn(icon: Icons.facebook),
-
-          const SizedBox(width: 16),
-
-          // Profile Icon
-          _IconBtn(icon: Icons.person_outline),
+          if (trailing != null) ...[
+            const SizedBox(width: 24),
+            trailing!,
+          ],
         ],
-      ),
-    );
-  }
-}
-
-class _IconBtn extends StatelessWidget {
-  final IconData icon;
-  const _IconBtn({required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(32),
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Icon(icon, size: 20, color: Colors.black87),
       ),
     );
   }
